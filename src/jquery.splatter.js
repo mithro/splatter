@@ -26,7 +26,8 @@
       min_font_size: 20,          // minimum font size for splats
       max_font_size: 300,         // maximum font size for splats
       height: $(window).height(), // height of splatter
-      width: $(window).width()    // width of splatter
+      width: $(window).width(),   // width of splatter
+      position: [-1, -1],         // top and left position of splat, only really useful with splat_count == 1
     }
   }
 
@@ -46,12 +47,22 @@
               return Math.floor( Math.random() * (max - min) ) + min;
             };
 
-            var randomized_top = function() {
-              return Math.floor( Math.random() * config.height);
+            var randomized_top = function(height) {
+              var t = 0;
+              if (config.position[1] == -1)
+                t = Math.floor( Math.random() * config.height);
+              else 
+                t = config.position[1];
+              return t-height/2;
             };
             
-            var randomized_right = function() {
-              return Math.floor( Math.random() * config.width);
+            var randomized_right = function(width) {
+              var r = 0;
+              if (config.position[0] == -1)
+                r = Math.floor( Math.random() * config.width);
+              else
+                r = config.position[0];
+              return r-width/2;
             };
             
             var radomized_color = function() {
@@ -114,8 +125,8 @@
                       'line-height': line_height,
                       'height': height,
                       'font-size': font_size,
-                      'top': randomized_top(),
-                      'left': randomized_right(),
+                      'top': randomized_top(height),
+                      'left': randomized_right(height*1.28), // Assume ~square
                       'color': radomized_color()
                     });
                   
